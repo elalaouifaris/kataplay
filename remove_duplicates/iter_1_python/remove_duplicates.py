@@ -1,6 +1,4 @@
 def remove_duplicates(duplicates_list):
-  unique = []
-  [unique.append(element) for element in duplicates_list
-    if element not in unique]
-
-  return unique
+  unique_set = set(duplicates_list)
+  sorting_function = duplicates_list.index
+  return sorted(unique_set, key=sorting_function)
