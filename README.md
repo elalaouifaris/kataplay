@@ -17,3 +17,4 @@ Katas interesting do to:
 - Hangman:
   - [Core mode](https://www.codewars.com/kata/hangman-game)
   - Interactive: CLI version with interactive terminal interface
+- Code a [2048 Game](https://en.wikipedia.org/wiki/2048_(video_game)): on [codewars](https://www.codewars.com/kata/2048)
