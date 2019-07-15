@@ -1,26 +1,27 @@
 defmodule DurationFormater do
   @label %{
     unit: "1",
-    plural: "s",
     and:  " and ",
     separator: ", ",
     now: "now",
-    second: "second",
-    minute: "minute",
-    hour: "hour",
-    day: "day",
-    year: "year"
+    second:  %{singular: "second",  plural: "seconds"},
+    minute:  %{singular: "minute",  plural: "minutes"},
+    hour:    %{singular: "hour",    plural: "hours"},
+    day:     %{singular: "day",     plural: "days"},
+    year:    %{singular: "year",    plural: "years"},
+    century: %{singular: "century", plural: "centuries"}
   }
 
-  @in_seconds %{
-    second: 1,
-    minute: 60,
-    hour: 60 * 60,
-    day: 60 * 60 * 24,
-    year: 60 * 60 * 24 * 365
-  }
+  @in_seconds [
+    century: 60 * 60 * 24 * 365 * 100,
+    year:    60 * 60 * 24 * 365,
+    day:     60 * 60 * 24,
+    hour:    60 * 60,
+    minute:  60,
+    second:   1
+  ]
 
-  @duration_types [:year, :day, :hour, :minute, :second]
+  @duration_types Keyword.keys @in_seconds
 
   def format_duration(0), do: @label.now
   def format_duration(seconds) do
@@ -45,12 +46,16 @@ defmodule DurationFormater do
   end
 
 
-  defp format_output([{duration_type, 1}| []]), do: "#{@label.unit} #{@label[duration_type]}"
-  defp format_output([{duration_type, count}| []]), do: "#{count} #{@label[duration_type]}#{@label.plural}"
-  defp format_output([before_last, last | []]) do
-    format_output([before_last]) <> @label.and <> format_output([last])
+  defp format_output([{duration_type,     1}| []]) do
+    "#{@label.unit} #{@label[duration_type].singular}"
   end
-  defp format_output([portion | rest]) do
-    format_output([portion]) <> @label.separator <> format_output(rest)
+  defp format_output([{duration_type, count}| []]) do
+    "#{count} #{@label[duration_type].plural}"
+  end
+  defp format_output([before_last, last |   []]) do
+    format_output([before_last]) <> @label.and       <> format_output([last])
+  end
+  defp format_output([portion           | rest]) do
+    format_output([portion])     <> @label.separator <> format_output(rest)
   end
 end

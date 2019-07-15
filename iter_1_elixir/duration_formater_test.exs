@@ -26,7 +26,12 @@ defmodule DurationFormaterTest do
     assert format_duration(60 * 60 * 24 * 2 + 60 * 60 * 3 + 3) == "2 days, 3 hours and 3 seconds"
   end
 
-  test "format duration beyond a year" do
+  test "format duration below a 100 years" do
     assert format_duration(60 * 60 * 24 * 365 * 3 + 60 * 3 + 5) == "3 years, 3 minutes and 5 seconds"
+  end
+
+  test "format duration beyond a century" do
+    assert format_duration(60 * 60 * 24 * 365 * 100) == "1 century"
+    assert format_duration(60 * 60 * 24 * 365 * 200) == "2 centuries"
   end
 end
