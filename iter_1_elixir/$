@@ -14,6 +14,6 @@ defmodule DurationFormaterTest do
   test "format duration below 60 minutes" do
     assert format_duration(60) == "1 minute"
     assert format_duration(120) == "2 minutes"
-    assert format_duration(121) == "2 minutes and 1 second"
   end
+
 end
