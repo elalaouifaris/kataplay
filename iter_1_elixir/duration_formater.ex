@@ -23,13 +23,13 @@ defmodule DurationFormater do
 
   @duration_types Keyword.keys @in_seconds
 
-  def format_duration(0), do: @label.now
   def format_duration(seconds) do
     seconds
     |> decompose_duration(@duration_types)
     |> format_output()
   end
 
+  defp decompose_duration(0, @duration_types), do: :now
   defp decompose_duration(0, _types), do: []
   defp decompose_duration(seconds, [duration_type | rest_of_types]) do
     type_count = div(seconds, @in_seconds[duration_type]) 
@@ -46,16 +46,17 @@ defmodule DurationFormater do
   end
 
 
-  defp format_output([{duration_type,     1}| []]) do
+  defp format_output(:now), do: @label.now
+  defp format_output([{duration_type, 1}| []]) do
     "#{@label.unit} #{@label[duration_type].singular}"
   end
   defp format_output([{duration_type, count}| []]) do
     "#{count} #{@label[duration_type].plural}"
   end
-  defp format_output([before_last, last |   []]) do
-    format_output([before_last]) <> @label.and       <> format_output([last])
+  defp format_output([before_last, last | []]) do
+    format_output([before_last]) <> @label.and <> format_output([last])
   end
-  defp format_output([portion           | rest]) do
-    format_output([portion])     <> @label.separator <> format_output(rest)
+  defp format_output([portion | rest]) do
+    format_output([portion]) <> @label.separator <> format_output(rest)
   end
 end
