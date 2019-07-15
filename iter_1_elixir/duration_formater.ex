@@ -3,17 +3,20 @@ defmodule DurationFormater do
     unit: "1",
     plural: "s",
     and:  " and ",
+    separator: ", ",
     now: "now",
     second: "second",
-    minute: "minute"
+    minute: "minute",
+    hour: "hour"
   }
 
   @in_seconds %{
+    second: 1,
     minute: 60,
-    second: 1
+    hour: 60 * 60
   }
 
-  @duration_types [:minute, :second]
+  @duration_types [:hour, :minute, :second]
 
   def format_duration(0), do: @label.now
   def format_duration(seconds) do
@@ -46,4 +49,7 @@ defmodule DurationFormater do
   end
   defp format_output([{count, label}| []]), do: "#{count} #{label}"
   defp format_output([{count, label, plural}| []]), do: "#{count} #{label}#{plural}"
+  defp format_output([portion | rest]) do
+    format_output([portion]) <> @label.separator <> format_output(rest)
+  end
 end
