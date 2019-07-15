@@ -8,17 +8,19 @@ defmodule DurationFormater do
     second: "second",
     minute: "minute",
     hour: "hour",
-    day: "day"
+    day: "day",
+    year: "year"
   }
 
   @in_seconds %{
     second: 1,
     minute: 60,
     hour: 60 * 60,
-    day: 60 * 60 * 24
+    day: 60 * 60 * 24,
+    year: 60 * 60 * 24 * 365
   }
 
-  @duration_types [:day, :hour, :minute, :second]
+  @duration_types [:year, :day, :hour, :minute, :second]
 
   def format_duration(0), do: @label.now
   def format_duration(seconds) do
@@ -46,11 +48,11 @@ defmodule DurationFormater do
   end
 
 
+  defp format_output([{count, label}| []]), do: "#{count} #{label}"
+  defp format_output([{count, label, plural}| []]), do: "#{count} #{label}#{plural}"
   defp format_output([before_last, last | []]) do
     format_output([before_last]) <> @label.and <> format_output([last])
   end
-  defp format_output([{count, label}| []]), do: "#{count} #{label}"
-  defp format_output([{count, label, plural}| []]), do: "#{count} #{label}#{plural}"
   defp format_output([portion | rest]) do
     format_output([portion]) <> @label.separator <> format_output(rest)
   end
