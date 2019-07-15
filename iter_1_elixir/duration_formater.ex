@@ -7,16 +7,18 @@ defmodule DurationFormater do
     now: "now",
     second: "second",
     minute: "minute",
-    hour: "hour"
+    hour: "hour",
+    day: "day"
   }
 
   @in_seconds %{
     second: 1,
     minute: 60,
-    hour: 60 * 60
+    hour: 60 * 60,
+    day: 60 * 60 * 24
   }
 
-  @duration_types [:hour, :minute, :second]
+  @duration_types [:day, :hour, :minute, :second]
 
   def format_duration(0), do: @label.now
   def format_duration(seconds) do
