@@ -1,0 +1,2 @@
+defmodule DurationFormater do
+end
