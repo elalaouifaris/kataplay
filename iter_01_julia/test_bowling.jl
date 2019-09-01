@@ -8,4 +8,5 @@ end
 
 @testset "Score evaluation without optional rolls" begin
   @test check_score("11|11|11|11|11|11|11|11|11|11||", 20)
+  @test check_score("-1|11|11|11|11|11|11|11|11|11||", 19)
 end
