@@ -25,30 +25,38 @@ module Bowling
 
   function _score(frame_list, bonus)
     score = 0
-    add_next_roll = 0
+    frame_bonus = (0, 0)
 
     for frame in frame_list
-      score, add_next_roll = _update_score(frame, score, add_next_roll)
+      score, frame_bonus = _update_score(frame, score, frame_bonus)
     end
 
     score
   end
 
-  function _update_score(frame, score, add_next_roll)
-      first_roll, second_roll = frame
+  function _update_score(frame, score, previous_frame_bonus)
+    first_roll, second_roll = frame
+    previous_frame_points = _get_previous_frame_points(first_roll, second_roll, previous_frame_bonus)
+    current_frame_points, next_frame = _get_current_frame_points(first_roll, second_roll)
 
-      if add_next_roll != 0
-        score += add_next_roll * parse(Int, first_roll)
-        add_next_roll = 0
-      end
+    score += previous_frame_points + current_frame_points
+    score, next_frame
+  end
 
-      if second_roll == tag_for["spare_roll"]
-        score += frame_full_score
-        add_next_roll += 1
-      else
-        score += parse(Int, first_roll) + parse(Int, second_roll)
-      end
+  function _get_previous_frame_points(first_roll, second_roll, previous_frame_bonus)
+    score_update = first(previous_frame_bonus) * parse(Int, first_roll)
+    score_update
+  end
 
-    score, add_next_roll
+  function _get_current_frame_points(first_roll, second_roll)
+    if second_roll == tag_for["spare_roll"]
+      score_update = frame_full_score
+      next_frame_bonus = (1, 0)
+    else
+      score_update = parse(Int, first_roll) + parse(Int, second_roll)
+      next_frame_bonus = (0, 0)
+    end
+
+    score_update, next_frame_bonus
   end
 end
