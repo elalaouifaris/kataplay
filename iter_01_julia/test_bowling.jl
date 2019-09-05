@@ -17,5 +17,5 @@ end
 end
 
 @testset "Score evaluation strike rolls" begin
-  @test_skip Bowling.score("X|11|11|11|11|11|11|11|11|11||") == 30
+  @test Bowling.score("X|11|11|11|11|11|11|11|11|11||") == 30
 end
