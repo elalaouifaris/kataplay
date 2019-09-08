@@ -37,19 +37,20 @@ module Bowling
 
   function _update_score(frame, score, previous_frame_bonus)
     first_roll, second_roll = first(frame), last(frame)
-    previous_frame_points = _get_previous_frame_points(first_roll, second_roll, previous_frame_bonus)
+    previous_frame_points, next_frame_bonus = _get_previous_frame_points(first_roll, second_roll, previous_frame_bonus)
     current_frame_points, next_frame = _get_current_frame_points(first_roll, second_roll)
 
     score += previous_frame_points + current_frame_points
+    next_frame = (first(next_frame) + first(next_frame_bonus)), (last(next_frame) + last(next_frame_bonus))
     score, next_frame
   end
 
   function _get_previous_frame_points(first_roll, second_roll, previous_frame_bonus)
-    first_roll_points, second_roll_points = _parse_frame_points(first_roll, second_roll)
+    first_roll_points, second_roll_points, next_frame_bonus = _parse_frame_points(first_roll, second_roll, previous_frame_bonus)
     first_roll_bonus =  first(previous_frame_bonus) * first_roll_points
     second_roll_bonus = last(previous_frame_bonus) * second_roll_points
     score_update = first_roll_bonus + second_roll_bonus
-    score_update
+    score_update, next_frame_bonus
   end
 
   function _get_current_frame_points(first_roll, second_roll)
@@ -67,18 +68,21 @@ module Bowling
     score_update, next_frame_bonus
   end
 
-  function _parse_frame_points(first_roll, second_roll)
+  function _parse_frame_points(first_roll, second_roll, previous_frame_bonus)
     if first_roll == tag_for["strike_roll"]
       first_roll = frame_full_score
       second_roll = 0
+      next_frame_bonus = (last(previous_frame_bonus), 0)
     elseif second_roll == tag_for["spare_roll"]
       first_roll = parse(Int, first_roll)
       second_roll = frame_full_score - first_roll
+      next_frame_bonus = (0, 0)
     else
       first_roll = parse(Int, first_roll)
       second_roll = parse(Int, second_roll)
+      next_frame_bonus = (0, 0)
     end
 
-    first_roll, second_roll
+    first_roll, second_roll, next_frame_bonus
   end
 end
